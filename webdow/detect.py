@@ -1,4 +1,4 @@
-"""siteclone.detect — pipeline stage 2: framework detection + HTML asset extraction.
+"""webdow.detect — pipeline stage 2: framework detection + HTML asset extraction.
 
 Called by ``cli.py`` as ``detect_framework(html)`` / ``extract_assets(html)``.
 

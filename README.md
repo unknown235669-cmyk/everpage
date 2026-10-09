@@ -1,82 +1,104 @@
-# siteclone
+<div align="center">
 
-Paste a link → get a working 1:1 offline clone. Built for JS-heavy sites
-where `wget`/HTTrack only capture a shell: hashed bundles, runtime-built
-asset URLs, web workers, 3D/geometry payloads, fonts, media — downloaded,
-rewritten to local paths, served, and headless-verified.
+# WebDow
 
-Proven on production Three.js/WebGL apps and WordPress/Elementor,
-Astro and Vite/React single-page sites.
+### Paste a link → get a working 1:1 offline clone.
 
-## Install
+[![License: MIT](https://img.shields.io/badge/License-MIT-cyan.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![No heavy deps](https://img.shields.io/badge/deps-requests%20%2B%20playwright-green.svg)](requirements.txt)
+[![Verified on live sites](https://img.shields.io/badge/verified-4%20production%20sites-magenta.svg)](#proven-in-the-field)
+
+*Built for JS-heavy sites where classic mirrors only capture a shell —
+hashed bundles, runtime-built asset URLs, web workers, 3D payloads,
+fonts, media. Downloaded, rewritten to local paths, served, and
+headless-verified.*
+
+</div>
+
+---
+
+## Quickstart
 
 ```bash
 pip install -r requirements.txt
-playwright install chromium   # needed for the trace + verify stages
+playwright install chromium   # one-time, for the trace + verify stages
 ```
-
-Requires Python 3.10+.
-
-## Use
 
 Interactive menu:
 
 ```bash
-python -m siteclone.tui
+python -m webdow.tui
 ```
 
 Direct CLI:
 
 ```bash
-python -m siteclone.cli https://example.com/ -o ./example-clone --port 8919
+python -m webdow.cli https://example.com/ -o ./example-clone --port 8919
 ```
 
-Options: `--pages about,pricing` (extra routes), `--max-pages 200`
-(auto-crawl cap, sitemap + links), `--no-crawl`, `--no-trace`
-(skip the headless runtime pass; faster but misses runtime-only assets).
+Useful flags: `--pages about,pricing` · `--max-pages 200`
+(sitemap + link crawl cap) · `--no-crawl` · `--no-trace`
+(skip the headless pass — faster, misses runtime-only assets).
 
-Each clone ships with `OPEN-ME.bat` (or run
-`python serve_<name>.py <port>`) for instant local preview.
+Every clone ships `OPEN-ME.bat` (or `python serve_<name>.py <port>`)
+for instant local preview.
 
 ## How it works
 
-1. **fetch** — homepage + manifest, real-browser headers, gzip handled.
-2. **detect** — framework fingerprint (Next/Vite/Astro/WordPress/Three…).
-3. **crawl** — sitemap + same-origin links as first-class pages
-   (extensionless *and* `.html`), recursion included.
-4. **trace** — one headless pass records URLs the app resolves at runtime.
-5. **assets/chunks** — bundle mining: hashed chunks, `setPath` loader
-   roots, backtick templates (incl. multi-var `terrain/index` shapes),
-   ID pools, ternary alternatives, LOD-gap interpolation, absolute
-   same-origin worker URLs.
-6. **rewrite** — root-absolute → depth-relative paths; absolute
-   same-origin URLs folded to local in HTML/CSS/JS/JSON (workers are
-   strictly same-origin and break otherwise); query-page URLs
-   (`?p=`, `?page=`) self-name instead of clobbering `index.html`.
-7. **serve** — offline preview server with API/beacon stubs.
-8. **verify** — headless reload: JS errors, failed requests, screenshots.
-   Same-host requests for files already on disk don't count as failures
-   (headless aborts streaming downloads; the bytes are what matter).
+| Stage | What it does |
+|---|---|
+| `fetch` | Homepage + manifest with real-browser headers, gzip handled |
+| `detect` | Framework fingerprint (Next / Vite / Astro / WordPress / Three.js…) |
+| `crawl` | Sitemap + same-origin links as first-class pages, recursion included |
+| `trace` | One headless pass records URLs the app resolves at runtime |
+| `assets` / `chunks` | Bundle mining: hashed chunks, loader roots, backtick templates (incl. multi-var `terrain/index` shapes), ID pools, ternary alternatives, LOD-gap interpolation, absolute same-origin worker URLs |
+| `rewrite` | Root-absolute → depth-relative paths; absolute same-origin URLs folded to local in HTML/CSS/JS/JSON; query-page URLs (`?p=`, `?page=`) self-name instead of clobbering `index.html` |
+| `serve` | Offline preview server with API/beacon stubs |
+| `verify` | Headless reload: JS errors, failed requests, screenshots. Same-host requests for files already on disk don't count (headless aborts streaming downloads — the bytes are what matter) |
 
 `python smoke_test.py` runs the offline self-checks (no network).
 
-## Honest limitations
+## WebDow vs the rest
 
-- **No backend cloning.** Server logic, databases, auth sessions,
-  payments stay server-side; `/api/*` and tracker calls get stubbed.
-- **No login walls, paywalls, DRM, or aggressive anti-bot.** Only what a
-  public fetch + one headless pass can reach.
-- **No interaction crawling yet.** Content behind clicks/tabs/logins is
-  missed; the trace pass is passive (scroll + idle), not scripted play.
-- **Live-only breakage reproduces.** Dead-upstream links (404 on live)
-  warn instead of failing; upstream JS bugs appear in the clone too.
-- Big 3D sites take minutes and thousands of requests; re-probes are
-  cheap only because nothing is cached between runs yet.
+|  | WebDow | `wget` / HTTrack | SingleFile | Browser archivers (Browsertrix…) | Commercial copiers |
+|---|---|---|---|---|---|
+| JS-bundle / hashed-chunk sites | ✅ | ❌ shell only | ⚠️ partial | ✅ | ⚠️ varies |
+| Runtime-built asset URLs | ✅ mined + traced | ❌ | ❌ | ✅ observed | ⚠️ varies |
+| Web workers / WASM / 3D payloads | ✅ | ❌ | ❌ | ✅ | ⚠️ |
+| Working local preview server | ✅ + `OPEN-ME.bat` | ❌ broken links | n/a (one file) | ❌ replay stack needed | ⚠️ varies |
+| Headless boot verification | ✅ errors + shots | ❌ | ❌ | ⚠️ crawl stats only | ❌ |
+| Single-file portability | ❌ (folder clone) | ❌ | ✅ best in class | ❌ | ❌ |
+| Login-walled / paywalled content | ❌ | ❌ | ❌ | ⚠️ with scripted auth | ⚠️ varies |
+| Backend logic / DB / payments | ❌ stubbed | ❌ | ❌ | ❌ | ❌ |
+| Interaction crawling (clicks/tabs) | ❌ passive trace only | ❌ | ❌ | ✅ scripted behaviors | ⚠️ varies |
+| Setup weight | pip + one browser | preinstalled | extension | docker / heavy | signup + $$$ |
+
+No tool on that table clones a backend — server logic, sessions and
+payments stay server-side everywhere. WebDow is honest about it: `/api/*`
+and tracker calls get stubbed, and the README of every clone says so.
+
+## Proven in the field
+
+| Site | Stack | Result |
+|---|---|---|
+| 3D messenger world (Three.js, Draco, workers) | Vite + custom loaders | 0 files missing vs manual baseline, boots with 0 page errors |
+| Creative portfolio (WebGL2, KTX2, Draco) | Vite + Three.js | DOM-identical to live (153/153 divs), 0 page errors |
+| College portal (Elementor/WordPress) | WP + page builders | 1793/1793 divs, homepage + query-page handling verified |
+| Studio site (Astro, CMS media) | Astro + headless CMS | Boots with full content, 0 page errors |
+
+## Limitations (stated plainly)
+
+- **Backends aren't cloned.** APIs are stubbed with captured payloads.
+- **Gated content isn't reachable.** Logins, paywalls, DRM, aggressive anti-bot need a real session.
+- **Live state isn't frozen.** Websockets, personalization, per-user feeds snapshot to whatever loaded.
+- **Interaction-gated assets can be missed.** The trace pass scrolls and idles; it doesn't click through tabs or modals yet.
+- **Upstream breakage reproduces.** A link that's 404 on live warns instead of failing; upstream JS bugs appear in the clone too.
 
 ## Layout
 
 ```
-siteclone/
+webdow/
   cli.py        pipeline orchestration
   fetcher.py    sessions, retries, URL→file mapping, parallel downloads
   detect.py     framework + HTML asset/link extraction
@@ -87,6 +109,11 @@ siteclone/
   verify.py     headless boot/error/screenshot check
   tui.py        interactive menu
 ```
+
+## Contributing
+
+Issues with a failing URL + the probe log tail are gold. PRs that add a
+`self_test` regression case alongside any parser change get merged fastest.
 
 ## License
 

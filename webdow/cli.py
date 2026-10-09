@@ -1,8 +1,8 @@
-"""Stage 1 entry point: ``python -m siteclone.cli <url> [-o outdir] [--port N]
+"""Stage 1 entry point: ``python -m webdow.cli <url> [-o outdir] [--port N]
 [--pages route1,route2]``.
 
 Parses args, normalizes the URL, creates the output dir, runs stage 1
-(homepage + manifest + extra pages via :mod:`siteclone.fetcher`), then
+(homepage + manifest + extra pages via :mod:`webdow.fetcher`), then
 hands off to sibling stages (detect, chunks, rewrite, serve, verify) when
 they exist. Sibling stages are built by other agents in parallel, so every
 one of them is imported defensively: missing modules are reported and
@@ -56,7 +56,7 @@ def default_outdir_for(origin):
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(
-        prog="siteclone",
+        prog="webdow",
         description="Clone a site in stages: fetch, detect, chunks, rewrite, serve, verify.",
     )
     parser.add_argument("url", help="site URL to clone (scheme optional)")
@@ -88,7 +88,7 @@ def parse_args(argv=None):
 
 def _optional_import(name):
     try:
-        module = __import__("siteclone." + name, fromlist=["*"])
+        module = __import__("webdow." + name, fromlist=["*"])
         print("[stage:%s] loaded" % name)
         return module
     except ImportError as exc:
@@ -679,7 +679,7 @@ def main(argv=None):
 
     outdir = os.path.abspath(args.outdir) if args.outdir else default_outdir_for(origin)
     os.makedirs(outdir, exist_ok=True)
-    print("siteclone -> %s" % page_url)
+    print("webdow -> %s" % page_url)
     print("origin    : %s" % origin)
     print("outdir    : %s" % outdir)
 
@@ -702,7 +702,7 @@ def main(argv=None):
     verify_m = _optional_import("verify")
     trace_m = _optional_import("trace")
     if detect is None or chunks_m is None or rewrite_m is None or serve_m is None or verify_m is None:
-        print("[siteclone] pipeline module missing; clone incomplete", file=sys.stderr)
+        print("[webdow] pipeline module missing; clone incomplete", file=sys.stderr)
         return 1
     session = make_session(origin + "/")
     try:
@@ -711,7 +711,7 @@ def main(argv=None):
                             crawl=not args.no_crawl, max_pages=args.max_pages,
                             trace_m=trace_m, trace=not args.no_trace)
     except Exception as exc:
-        print("[siteclone] FAILED: %s" % exc, file=sys.stderr)
+        print("[webdow] FAILED: %s" % exc, file=sys.stderr)
         return 1
     print("DONE: %s" % outdir)
     return code

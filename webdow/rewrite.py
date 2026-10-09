@@ -1,4 +1,4 @@
-"""Offline path rewriting + route mapping (siteclone pipeline stage 4).
+"""Offline path rewriting + route mapping (webdow pipeline stage 4).
 
 Ports the proven per-site one-off scripts into one reusable module:
 
