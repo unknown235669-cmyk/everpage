@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*-clone/
+siteclone-probe-*/
+playwright-report/
+test-results/
+.DS_Store
+Thumbs.db
+.venv/
+venv/
+shots/
