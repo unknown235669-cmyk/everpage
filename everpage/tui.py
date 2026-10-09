@@ -1,6 +1,6 @@
-"""WebDow — interactive visual CLI: menus, prompts, live progress.
+"""Everpage — interactive visual CLI: menus, prompts, live progress.
 
-Run:  ``python -m webdow.tui``  (from the folder containing ``webdow/``)
+Run:  ``python -m everpage.tui``  (from the folder containing ``everpage/``)
 
 No third-party deps — stdlib only, works in any Windows terminal.
 """
@@ -47,14 +47,15 @@ def _c(code, text):
 
 
 BANNER = r"""
- __        __   _     ____
- \ \      / /__| |__ |  _ \  _____      __
-  \ \ /\ / / _ \ '_ \| | | |/ _ \ \ /\ / /
-   \ V  V /  __/ |_) | |_| | (_) \ V  V /
-    \_/\_/ \___|_.__/|____/ \___/ \_/\_/
+ _____                      ____
+| ____|_   _____ _ __ _ __ |  _ \ __ _  __ _  ___
+|  _| \ \ / / _ \ '__| '_ \| |_) / _` |/ _` |/ _ \
+| |___ \ V /  __/ |  | |_) |  __/ (_| | (_| |  __/
+|_____| \_/ \___|_|  | .__/|_|   \__,_|\__, |\___|
+                      |_|              |___/
 """
 
-TAGLINE = "paste a link  →  get a 1:1 offline clone"
+TAGLINE = "every page, forever — 1:1 offline clones"
 
 
 def _rule(width=46, char="─"):

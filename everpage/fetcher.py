@@ -1,7 +1,6 @@
 """Stage 1 download engine: session, retrying GET, disk layout, threaded fetch.
 
-Ported from the proven logic in D:\\search\\webdow\\mirror.py and
-D:\\search\\webdow\\mirror2.py, generalized (no hardcoded hosts/paths).
+Proven download logic, generalized (no hardcoded hosts/paths).
 
 Public API used by sibling stages:
     fetch_page(session, url) -> str

@@ -7,8 +7,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from webdow import chunks, detect, rewrite
-from webdow.fetcher import local_path_for
+from everpage import chunks, detect, rewrite
+from everpage.fetcher import local_path_for
 
 
 def main():

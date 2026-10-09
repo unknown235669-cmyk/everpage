@@ -1,8 +1,8 @@
 <div align="center">
 
-# WebDow
+# Everpage
 
-### Paste a link → get a working 1:1 offline clone.
+### Every page, forever — paste a link, get a working 1:1 offline clone.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-cyan.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
@@ -28,13 +28,13 @@ playwright install chromium   # one-time, for the trace + verify stages
 Interactive menu:
 
 ```bash
-python -m webdow.tui
+python -m everpage.tui
 ```
 
 Direct CLI:
 
 ```bash
-python -m webdow.cli https://example.com/ -o ./example-clone --port 8919
+python -m everpage.cli https://example.com/ -o ./example-clone --port 8919
 ```
 
 Useful flags: `--pages about,pricing` · `--max-pages 200`
@@ -59,9 +59,9 @@ for instant local preview.
 
 `python smoke_test.py` runs the offline self-checks (no network).
 
-## WebDow vs the rest
+## Everpage vs the rest
 
-|  | WebDow | `wget` / HTTrack | SingleFile | Browser archivers (Browsertrix…) | Commercial copiers |
+|  | Everpage | `wget` / HTTrack | SingleFile | Browser archivers (Browsertrix…) | Commercial copiers |
 |---|---|---|---|---|---|
 | JS-bundle / hashed-chunk sites | ✅ | ❌ shell only | ⚠️ partial | ✅ | ⚠️ varies |
 | Runtime-built asset URLs | ✅ mined + traced | ❌ | ❌ | ✅ observed | ⚠️ varies |
@@ -75,8 +75,8 @@ for instant local preview.
 | Setup weight | pip + one browser | preinstalled | extension | docker / heavy | signup + $$$ |
 
 No tool on that table clones a backend — server logic, sessions and
-payments stay server-side everywhere. WebDow is honest about it: `/api/*`
-and tracker calls get stubbed, and the README of every clone says so.
+payments stay server-side everywhere. Everpage is honest about it:
+`/api/*` and tracker calls get stubbed.
 
 ## Proven in the field
 
@@ -98,7 +98,7 @@ and tracker calls get stubbed, and the README of every clone says so.
 ## Layout
 
 ```
-webdow/
+everpage/
   cli.py        pipeline orchestration
   fetcher.py    sessions, retries, URL→file mapping, parallel downloads
   detect.py     framework + HTML asset/link extraction
