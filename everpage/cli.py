@@ -717,5 +717,10 @@ def main(argv=None):
     return code
 
 
+def console_entry():
+    """Entry point for the ``everpage`` console script (preserves exit code)."""
+    raise SystemExit(main())
+
+
 if __name__ == "__main__":
     sys.exit(main())

@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "everpage"
+version = "0.1.0"
+description = "Paste a link, get a working 1:1 offline website clone."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Everpage contributors" }]
+keywords = ["website-copier", "offline", "mirror", "httrack-alternative",
+            "website-downloader", "archiving", "playwright", "scraping"]
+dependencies = [
+    "requests",
+    "playwright",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Internet :: WWW/HTTP",
+]
+
+[project.urls]
+Homepage = "https://github.com/unknown235669-cmyk/everpage"
+
+[project.scripts]
+everpage = "everpage.cli:console_entry"
+everpage-tui = "everpage.tui:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["everpage*"]

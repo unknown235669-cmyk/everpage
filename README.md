@@ -42,8 +42,16 @@ The name is the promise. If a page was public, Everpage keeps it.
 ## Quickstart
 
 ```bash
-pip install -r requirements.txt
+pip install everpage
 playwright install chromium   # one-time, for the trace + verify stages
+```
+
+From source:
+
+```bash
+git clone https://github.com/unknown235669-cmyk/everpage
+cd everpage
+pip install -r requirements.txt
 ```
 
 Interactive menu:
