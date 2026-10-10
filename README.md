@@ -1,18 +1,21 @@
 <div align="center">
 
-# Everpage
+# Everpage — Website Copier & Offline Mirror Tool
 
-### Every page, forever — paste a link, get a working 1:1 offline clone.
+### Every page, forever. Paste a link → get a working 1:1 offline website clone.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-cyan.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
-[![No heavy deps](https://img.shields.io/badge/deps-requests%20%2B%20playwright-green.svg)](requirements.txt)
-[![Verified on live sites](https://img.shields.io/badge/verified-4%20production%20sites-magenta.svg)](#proven-in-the-field)
+[![Deps](https://img.shields.io/badge/deps-requests%20%2B%20playwright-green.svg)](requirements.txt)
+[![Platform](https://img.shields.io/badge/platform-windows%20%7C%20linux%20%7C%20macos-lightgrey.svg)](#quickstart)
 
-*Built for JS-heavy sites where classic mirrors only capture a shell —
-hashed bundles, runtime-built asset URLs, web workers, 3D payloads,
-fonts, media. Downloaded, rewritten to local paths, served, and
-headless-verified.*
+*The open-source HTTrack alternative for the modern web. Download entire
+websites — JavaScript-rendered SPAs, hashed bundles, web workers, WASM,
+3D scenes, fonts, media — rewritten to local paths, served offline with
+one double-click, and headless-verified. Where `wget` and HTTrack save
+empty shells, Everpage saves the working site.*
+
+`website-copier` · `offline-mirror` · `website-downloader` · `save-website-offline` · `httrack-alternative` · `mirror-website` · `spa-archiver`
 
 </div>
 
@@ -49,7 +52,7 @@ Interactive menu:
 python -m everpage.tui
 ```
 
-Direct CLI:
+Download a full website for offline browsing in one command:
 
 ```bash
 python -m everpage.cli https://example.com/ -o ./example-clone --port 8919
@@ -59,8 +62,49 @@ Useful flags: `--pages about,pricing` · `--max-pages 200`
 (sitemap + link crawl cap) · `--no-crawl` · `--no-trace`
 (skip the headless pass — faster, misses runtime-only assets).
 
-Every clone ships `OPEN-ME.bat` (or `python serve_<name>.py <port>`)
-for instant local preview.
+Every offline mirror ships `OPEN-ME.bat`
+(or `python serve_<name>.py <port>`) for instant local preview —
+open the cloned website in your browser with zero setup.
+
+## Proven results (measured with headless Playwright, not claimed)
+
+| Site cloned | Stack | File parity | Boot check |
+|---|---|---|---|
+| 3D messenger world (Three.js, Draco, workers) | Vite + custom loaders | **0 files missing** vs manual baseline | **0 page errors**, canvas + WebGL up |
+| Creative portfolio (WebGL2, KTX2, Draco) | Vite + Three.js | DOM-identical to live (**153/153 divs**, same HTML bytes) | **0 page errors** |
+| College portal (Elementor/WordPress) | WP + page builders | **1793/1793 divs**, homepage + `?p=` query pages correct | Same 3 JS errors as live (upstream bugs, reproduced exactly) |
+| Studio site (Astro, CMS media) | Astro + headless CMS | Full content set | **0 page errors**, news + works render |
+
+Method: every clone is reloaded in headless Chromium; JS page-errors,
+failed requests and screenshots are recorded per route. Same-host
+requests for files already on disk don't count as failures (headless
+aborts streaming downloads — the bytes are what matter).
+
+## Everpage vs the best website copiers
+
+Researched against the tools' own docs (October 2026):
+[websnap](https://github.com/uirip/websnap),
+[SingleFile FAQ](https://github.com/gildas-lormeau/SingleFile/blob/master/faq.md),
+[Browsertrix docs](https://docs.browsertrix.com/),
+[independent 2026 roundup](https://webdoner.com/best-website-copier-tools/).
+
+|  | **Everpage** | HTTrack (3.49, dormant since 2017) | SingleFile (+CLI) | websnap (2026) | Browsertrix | Commercial copiers |
+|---|---|---|---|---|---|---|
+| Full-site crawl (sitemap + links, pagination) | ✅ up to 200 pages | ✅ | ⚠️ URL list, flaky at scale | ✅ | ✅ | ⚠️ varies |
+| JS-bundle / hashed-chunk apps that boot | ✅ verified | ❌ empty shell | ⚠️ single page only | ✅ snapshots | ✅ in replay | ⚠️ varies |
+| Runtime-built asset URLs (JS templates) | ✅ mined + traced | ❌ | ❌ | ✅ observed | ✅ recorded | ⚠️ varies |
+| Interactive states (modals, tabs, clicks) | ❌ passive trace only | ❌ | ❌ scripts stripped by default | ✅ state-tree crawl | ⚠️ replay only | ⚠️ varies |
+| Workers / WASM / 3D that boot offline | ✅ verified | ❌ | ❌ | ⚠️ snapshot-oriented | ⚠️ inside WARC only | ⚠️ varies |
+| Double-click working preview | ✅ `OPEN-ME.bat` | ⚠️ fix links yourself | ✅ single file | ✅ static HTML | ❌ replay stack needed | ⚠️ varies |
+| Boot verification (errors + shots) | ✅ built in | ❌ | ❌ | ❌ | ⚠️ crawl reports | ❌ |
+| Login-walled content | ❌ | ❌ | ❌ | ✅ documented | ✅ via profiles | ⚠️ varies |
+| Backend logic / DB / payments | ❌ stubbed | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Setup weight | pip + one browser | preinstalled | extension / npm | npm + browser | docker / k8s | signup + $$$ |
+
+One independent roundup concluded that *a working offline website*
+is delivered by "none of the above." That is the gap Everpage was
+built to close — and unlike every other row in that roundup, it ships
+measured proof (see results above) instead of promises.
 
 ## How it works
 
@@ -73,31 +117,16 @@ for instant local preview.
 | `assets` / `chunks` | Bundle mining: hashed chunks, loader roots, backtick templates (incl. multi-var `terrain/index` shapes), ID pools, ternary alternatives, LOD-gap interpolation, absolute same-origin worker URLs |
 | `rewrite` | Root-absolute → depth-relative paths; absolute same-origin URLs folded to local in HTML/CSS/JS/JSON; query-page URLs (`?p=`, `?page=`) self-name instead of clobbering `index.html` |
 | `serve` | Offline preview server with API/beacon stubs |
-| `verify` | Headless reload: JS errors, failed requests, screenshots. Same-host requests for files already on disk don't count (headless aborts streaming downloads — the bytes are what matter) |
+| `verify` | Headless reload: JS errors, failed requests, screenshots |
 
 `python smoke_test.py` runs the offline self-checks (no network).
 
-## Everpage vs the rest
+## Honest scope
 
-Researched against the tools' own docs (October 2026): [websnap](https://github.com/uirip/websnap),
-[SingleFile FAQ](https://github.com/gildas-lormeau/SingleFile/blob/master/faq.md),
-[Browsertrix docs](https://docs.browsertrix.com/), [independent 2026 roundup](https://webdoner.com/best-website-copier-tools/).
-
-|  | Everpage | HTTrack | SingleFile | websnap | Browsertrix | Commercial copiers |
-|---|---|---|---|---|---|---|
-| JS-bundle / hashed-chunk sites | ✅ | ❌ shell only | ⚠️ partial | ✅ | ✅ | ⚠️ varies |
-| Runtime-built asset URLs | ✅ mined + traced | ❌ | ❌ | ✅ observed | ✅ recorded | ⚠️ varies |
-| Interactive states (modals, tabs, clicks) | ❌ passive trace only | ❌ | ❌ scripts stripped by default | ✅ state-tree crawl | ⚠️ replay only | ⚠️ varies |
-| Workers / WASM / 3D that boot offline | ✅ verified boots | ❌ | ❌ | ⚠️ snapshot-oriented | ⚠️ inside WARC only | ⚠️ varies |
-| Double-click working preview | ✅ `OPEN-ME.bat` | ⚠️ fix links yourself | ✅ single file | ✅ static HTML | ❌ replay stack needed | ⚠️ varies |
-| Boot verification (errors + shots) | ✅ | ❌ | ❌ | ❌ | ⚠️ crawl reports | ❌ |
-| Login-walled content | ❌ | ❌ | ❌ | ✅ documented | ✅ via profiles | ⚠️ varies |
-| Backend logic / DB / payments | ❌ stubbed | ❌ | ❌ | ❌ | ❌ | ❌ |
-| Setup weight | pip + one browser | preinstalled | extension | npm + browser | docker | signup + $$$ |
-
-One independent roundup concluded that *a working offline website*
-is delivered by "none of the above." That's the gap Everpage was
-built to close — with honest `❌` marks everywhere it doesn't.
+- **Backends aren't cloned** — APIs are stubbed with captured payloads.
+- **Gated content isn't reachable** — logins, paywalls, DRM and aggressive anti-bot need a real session.
+- **Live state isn't frozen** — websockets, personalization and per-user feeds snapshot to whatever loaded.
+- **Interaction-gated assets can be missed** — the trace pass scrolls and idles; scripted clicking (à la websnap) is on the roadmap.
 
 ## Layout
 
