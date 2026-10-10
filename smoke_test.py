@@ -51,7 +51,20 @@ def main():
         os.path.join("n", "index__page_2.html"))
     print("local_path_for: ok (query pages self-name, asset queries strip)")
 
+    test_console_entry_no_args_opens_tui()
+    print("console_entry no-args -> tui: ok")
     print("SMOKE_DONE")
+
+
+def test_console_entry_no_args_opens_tui():
+    """S1: bare `everpage` (no argv) must open the TUI menu, return 0."""
+    import sys
+    from unittest import mock
+    from everpage import cli, tui
+    with mock.patch.object(sys, "argv", ["everpage"]), \
+         mock.patch.object(tui, "main", return_value=None) as m:
+        assert cli.main() == 0
+        assert m.call_count == 1
 
 
 if __name__ == "__main__":

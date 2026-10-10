@@ -670,6 +670,12 @@ def run_pipeline(session, origin, outdir, extra_routes, fetch_result,
 
 
 def main(argv=None):
+    if argv is None:
+        argv = sys.argv[1:]
+    if not argv:
+        from . import tui as _tui  # lazy: tui imports this module at top
+        _tui.main()
+        return 0
     args = parse_args(argv)
     try:
         page_url, origin = normalize_url(args.url)
