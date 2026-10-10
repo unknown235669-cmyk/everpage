@@ -1,6 +1,6 @@
 <div align="center">
 
-# Everpage — Website Copier & Offline Mirror Tool
+# Everpage
 
 ### Every page, forever. Paste a link → get a working 1:1 offline website clone.
 
@@ -21,6 +21,26 @@ empty shells, Everpage saves the working site.*
 
 ---
 
+## Why I built this
+
+Hi — I clone websites for a living hobby, and I got tired of tools
+that promised the whole site and handed me an empty shell. You know
+the feeling: the download finishes, you open `index.html`, and it's a
+blank page staring back because everything real lived inside JavaScript
+bundles the copier never understood.
+
+So I built the tool I wished existed. Everpage doesn't guess what a
+site needs — it reads the bundles the way the browser does, follows
+the URLs the app itself resolves at runtime, rewrites every path so
+the copy boots offline, and then *proves it* by reloading the clone
+headless and checking for errors. If a page was public, Everpage keeps
+it. That's the whole philosophy, and the name is the promise:
+*every page, forever.*
+
+— Girivasan
+
+---
+
 ## About Everpage
 
 Most of the web is already gone. Sites redesign, startups die,
@@ -35,8 +55,6 @@ hard way, against production Three.js worlds and CMS sprawl, until
 file-level parity and clean headless boots stopped being aspirations
 and became the test suite.
 
-The name is the promise. If a page was public, Everpage keeps it.
-
 ---
 
 ## Quickstart
@@ -46,21 +64,13 @@ pip install everpage
 playwright install chromium   # one-time, for the trace + verify stages
 ```
 
-From source:
+Interactive menu (just type `everpage` — the menu opens by itself):
 
 ```bash
-git clone https://github.com/unknown235669-cmyk/everpage
-cd everpage
-pip install -r requirements.txt
+everpage
 ```
 
-Interactive menu:
-
-```bash
-python -m everpage.tui
-```
-
-Download a full website for offline browsing in one command:
+Or go direct when you know what you want:
 
 ```bash
 python -m everpage.cli https://example.com/ -o ./example-clone --port 8919
@@ -72,22 +82,25 @@ Useful flags: `--pages about,pricing` · `--max-pages 200`
 
 Every offline mirror ships `OPEN-ME.bat`
 (or `python serve_<name>.py <port>`) for instant local preview —
-open the cloned website in your browser with zero setup.
+double-click it and the cloned site just opens in your browser.
 
 ## Proven where it matters
 
 Everpage has cloned production sites end to end — Three.js 3D worlds,
 WebGL portfolios, WordPress portals, Astro CMS sites — and every one
-boots offline clean. Don't take our word for it: paste a link and
+boots offline clean. Don't take my word for it: paste a link and
 watch it happen.
 
-## Everpage vs the best website copiers
+## Everpage vs the rest
 
-Researched against the tools' own docs (October 2026):
+I researched this table from the tools' own docs (October 2026), not
+from marketing pages:
 [websnap](https://github.com/uirip/websnap),
 [SingleFile FAQ](https://github.com/gildas-lormeau/SingleFile/blob/master/faq.md),
 [Browsertrix docs](https://docs.browsertrix.com/),
 [independent 2026 roundup](https://webdoner.com/best-website-copier-tools/).
+Where we lose a row, the `❌` stays — I'd rather earn your star than
+trick you out of it.
 
 |  | **Everpage** | HTTrack (3.49, dormant since 2017) | SingleFile (+CLI) | websnap (2026) | Browsertrix | Commercial copiers |
 |---|---|---|---|---|---|---|
@@ -103,9 +116,8 @@ Researched against the tools' own docs (October 2026):
 | Setup weight | pip + one browser | preinstalled | extension / npm | npm + browser | docker / k8s | signup + $$$ |
 
 One independent roundup concluded that *a working offline website*
-is delivered by "none of the above." That is the gap Everpage was
-built to close — and unlike every other row in that roundup, it ships
-measured proof (see results above) instead of promises.
+is delivered by "none of the above." That's the gap I built Everpage
+to close.
 
 ## How it works
 
@@ -123,6 +135,8 @@ measured proof (see results above) instead of promises.
 `python smoke_test.py` runs the offline self-checks (no network).
 
 ## Honest scope
+
+I'll tell you straight what it can't do, so you never feel misled:
 
 - **Backends aren't cloned** — APIs are stubbed with captured payloads.
 - **Gated content isn't reachable** — logins, paywalls, DRM and aggressive anti-bot need a real session.
@@ -146,9 +160,12 @@ everpage/
 
 ## Contributing
 
-Issues with a failing URL + the probe log tail are gold. PRs that add a
-`self_test` regression case alongside any parser change get merged fastest.
+Found a site it chokes on? Open an issue with the URL and the probe
+log tail — that's gold for me. If you're fixing a parser, please add a
+`self_test` regression case next to it so it never breaks again. All
+PRs get a real review from a human (me), usually within days.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE). Do anything with it; a shout-out is
+appreciated but never required.
