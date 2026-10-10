@@ -53,6 +53,8 @@ def main():
 
     test_console_entry_no_args_opens_tui()
     print("console_entry no-args -> tui: ok")
+    test_console_entry_menu_abort_exits_clean()
+    print("console_entry menu abort -> clean exit 0: ok")
     print("SMOKE_DONE")
 
 
@@ -65,6 +67,17 @@ def test_console_entry_no_args_opens_tui():
          mock.patch.object(tui, "main", return_value=None) as m:
         assert cli.main() == 0
         assert m.call_count == 1
+
+
+def test_console_entry_menu_abort_exits_clean():
+    """S1-edge: Ctrl+C / closed stdin in the menu must exit 0, no traceback."""
+    import sys
+    from unittest import mock
+    from everpage import cli, tui
+    for sig in (KeyboardInterrupt, EOFError):
+        with mock.patch.object(sys, "argv", ["everpage"]), \
+             mock.patch.object(tui, "main", side_effect=sig):
+            assert cli.main() == 0
 
 
 if __name__ == "__main__":
