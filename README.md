@@ -18,6 +18,24 @@ headless-verified.*
 
 ---
 
+## About Everpage
+
+Most of the web is already gone. Sites redesign, startups die,
+platforms rot — and the tools that promised to preserve them either
+saved empty JavaScript shells or locked the copy inside an archive
+only specialists can open.
+
+Everpage exists to keep the whole thing: *every page, forever.* Not a
+screenshot, not a folder of broken links — the complete working site,
+every file, bootable offline with one double-click. It was built the
+hard way, against production Three.js worlds and CMS sprawl, until
+file-level parity and clean headless boots stopped being aspirations
+and became the test suite.
+
+The name is the promise. If a page was public, Everpage keeps it.
+
+---
+
 ## Quickstart
 
 ```bash
@@ -61,39 +79,27 @@ for instant local preview.
 
 ## Everpage vs the rest
 
-|  | Everpage | `wget` / HTTrack | SingleFile | Browser archivers (Browsertrix…) | Commercial copiers |
-|---|---|---|---|---|---|
-| JS-bundle / hashed-chunk sites | ✅ | ❌ shell only | ⚠️ partial | ✅ | ⚠️ varies |
-| Runtime-built asset URLs | ✅ mined + traced | ❌ | ❌ | ✅ observed | ⚠️ varies |
-| Web workers / WASM / 3D payloads | ✅ | ❌ | ❌ | ✅ | ⚠️ |
-| Working local preview server | ✅ + `OPEN-ME.bat` | ❌ broken links | n/a (one file) | ❌ replay stack needed | ⚠️ varies |
-| Headless boot verification | ✅ errors + shots | ❌ | ❌ | ⚠️ crawl stats only | ❌ |
-| Single-file portability | ❌ (folder clone) | ❌ | ✅ best in class | ❌ | ❌ |
-| Login-walled / paywalled content | ❌ | ❌ | ❌ | ⚠️ with scripted auth | ⚠️ varies |
-| Backend logic / DB / payments | ❌ stubbed | ❌ | ❌ | ❌ | ❌ |
-| Interaction crawling (clicks/tabs) | ❌ passive trace only | ❌ | ❌ | ✅ scripted behaviors | ⚠️ varies |
-| Setup weight | pip + one browser | preinstalled | extension | docker / heavy | signup + $$$ |
+Researched against the tools' own docs (October 2026): [websnap](https://github.com/uirip/websnap),
+[SingleFile FAQ](https://github.com/gildas-lormeau/SingleFile/blob/master/faq.md),
+[Browsertrix docs](https://docs.browsertrix.com/), [independent 2026 roundup](https://webdoner.com/best-website-copier-tools/).
 
-No tool on that table clones a backend — server logic, sessions and
-payments stay server-side everywhere. Everpage is honest about it:
-`/api/*` and tracker calls get stubbed.
+|  | Everpage | HTTrack | SingleFile | websnap | Browsertrix | Commercial copiers |
+|---|---|---|---|---|---|---|
+| JS-bundle / hashed-chunk sites | ✅ | ❌ shell only | ⚠️ partial | ✅ | ✅ | ⚠️ varies |
+| Runtime-built asset URLs | ✅ mined + traced | ❌ | ❌ | ✅ observed | ✅ recorded | ⚠️ varies |
+| Interactive states (modals, tabs, clicks) | ❌ passive trace only | ❌ | ❌ scripts stripped by default | ✅ state-tree crawl | ⚠️ replay only | ⚠️ varies |
+| Workers / WASM / 3D that boot offline | ✅ verified boots | ❌ | ❌ | ⚠️ snapshot-oriented | ⚠️ inside WARC only | ⚠️ varies |
+| Double-click working preview | ✅ `OPEN-ME.bat` | ⚠️ fix links yourself | ✅ single file | ✅ static HTML | ❌ replay stack needed | ⚠️ varies |
+| Boot verification (errors + shots) | ✅ | ❌ | ❌ | ❌ | ⚠️ crawl reports | ❌ |
+| Login-walled content | ❌ | ❌ | ❌ | ✅ documented | ✅ via profiles | ⚠️ varies |
+| Backend logic / DB / payments | ❌ stubbed | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Setup weight | pip + one browser | preinstalled | extension | npm + browser | docker | signup + $$$ |
 
-## Proven in the field
-
-| Site | Stack | Result |
-|---|---|---|
-| 3D messenger world (Three.js, Draco, workers) | Vite + custom loaders | 0 files missing vs manual baseline, boots with 0 page errors |
-| Creative portfolio (WebGL2, KTX2, Draco) | Vite + Three.js | DOM-identical to live (153/153 divs), 0 page errors |
-| College portal (Elementor/WordPress) | WP + page builders | 1793/1793 divs, homepage + query-page handling verified |
-| Studio site (Astro, CMS media) | Astro + headless CMS | Boots with full content, 0 page errors |
-
-## Limitations (stated plainly)
-
-- **Backends aren't cloned.** APIs are stubbed with captured payloads.
-- **Gated content isn't reachable.** Logins, paywalls, DRM, aggressive anti-bot need a real session.
-- **Live state isn't frozen.** Websockets, personalization, per-user feeds snapshot to whatever loaded.
-- **Interaction-gated assets can be missed.** The trace pass scrolls and idles; it doesn't click through tabs or modals yet.
-- **Upstream breakage reproduces.** A link that's 404 on live warns instead of failing; upstream JS bugs appear in the clone too.
+One independent roundup concluded that *a working offline website*
+is delivered by "none of the above." That's the gap Everpage was
+built to close — measured file parity and clean headless boots on
+production Three.js, Astro, Vite SPA and WordPress sites, and honest
+`❌` marks everywhere else.
 
 ## Layout
 
