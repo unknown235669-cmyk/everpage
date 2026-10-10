@@ -674,7 +674,10 @@ def main(argv=None):
         argv = sys.argv[1:]
     if not argv:
         from . import tui as _tui  # lazy: tui imports this module at top
-        _tui.main()
+        try:
+            _tui.main()
+        except (KeyboardInterrupt, EOFError):
+            print()
         return 0
     args = parse_args(argv)
     try:
