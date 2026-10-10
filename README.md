@@ -37,8 +37,6 @@ headless and checking for errors. If a page was public, Everpage keeps
 it. That's the whole philosophy, and the name is the promise:
 *every page, forever.*
 
-— Girivasan
-
 ---
 
 ## About Everpage
