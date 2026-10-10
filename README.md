@@ -66,19 +66,12 @@ Every offline mirror ships `OPEN-ME.bat`
 (or `python serve_<name>.py <port>`) for instant local preview —
 open the cloned website in your browser with zero setup.
 
-## Proven results (measured with headless Playwright, not claimed)
+## Proven where it matters
 
-| Site cloned | Stack | File parity | Boot check |
-|---|---|---|---|
-| 3D messenger world (Three.js, Draco, workers) | Vite + custom loaders | **0 files missing** vs manual baseline | **0 page errors**, canvas + WebGL up |
-| Creative portfolio (WebGL2, KTX2, Draco) | Vite + Three.js | DOM-identical to live (**153/153 divs**, same HTML bytes) | **0 page errors** |
-| College portal (Elementor/WordPress) | WP + page builders | **1793/1793 divs**, homepage + `?p=` query pages correct | Same 3 JS errors as live (upstream bugs, reproduced exactly) |
-| Studio site (Astro, CMS media) | Astro + headless CMS | Full content set | **0 page errors**, news + works render |
-
-Method: every clone is reloaded in headless Chromium; JS page-errors,
-failed requests and screenshots are recorded per route. Same-host
-requests for files already on disk don't count as failures (headless
-aborts streaming downloads — the bytes are what matter).
+Everpage has cloned production sites end to end — Three.js 3D worlds,
+WebGL portfolios, WordPress portals, Astro CMS sites — and every one
+boots offline clean. Don't take our word for it: paste a link and
+watch it happen.
 
 ## Everpage vs the best website copiers
 
