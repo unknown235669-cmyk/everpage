@@ -97,9 +97,7 @@ Researched against the tools' own docs (October 2026): [websnap](https://github.
 
 One independent roundup concluded that *a working offline website*
 is delivered by "none of the above." That's the gap Everpage was
-built to close — measured file parity and clean headless boots on
-production Three.js, Astro, Vite SPA and WordPress sites, and honest
-`❌` marks everywhere else.
+built to close — with honest `❌` marks everywhere it doesn't.
 
 ## Layout
 
